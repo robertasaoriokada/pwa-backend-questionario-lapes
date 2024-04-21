@@ -29,7 +29,7 @@ public class User {
   private String password;
 
   @Column(name = "forms")
-  @OneToMany(mappedBy = "owner")
+  @OneToMany(mappedBy = "user")
   private Set<Forms> forms;
 
   @Column(name = "created_at")

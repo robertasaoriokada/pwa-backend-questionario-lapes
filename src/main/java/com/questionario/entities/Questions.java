@@ -1,6 +1,8 @@
 package com.questionario.entities;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,14 +33,13 @@ public class Questions {
   @Column(name = "answer_type")
   private String answer_type;
 
-  @Column(name = "forms")
   @ManyToOne()
-  @JoinColumn(name = "question_id", nullable = false)
+  @JoinColumn(name = "forms_id", nullable = false)
   private Forms forms;
 
   @Column(name = "answers")
   @OneToMany(mappedBy = "question")
-  private Answers answers;
+  private Set<Answers> answers = new HashSet<Answers>();
 
   @Column(name = "created_at")
   private Timestamp created_at;

@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,7 +24,7 @@ public class Answers {
   @Column(name = "point")
   private String point;
 
-  @Column(name = "question")
+  @ManyToOne
   @JoinColumn(name = "answer_id", nullable = false)
   private Questions question;
 

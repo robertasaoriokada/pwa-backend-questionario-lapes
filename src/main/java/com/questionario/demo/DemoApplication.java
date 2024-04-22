@@ -20,7 +20,7 @@ public class DemoApplication {
         Session session = sessionFactory.openSession();
         try{
           session.beginTransaction();
-          User user = new User("José Ryan", "joseryan@gmail.com", "password123");
+          User user = new User("José", "jose@gmail.com", "password");
           session.persist(user);
           session.getTransaction().commit();
         }catch(Exception e){

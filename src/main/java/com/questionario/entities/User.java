@@ -1,8 +1,12 @@
 package com.questionario.entities;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User implements UserDetails{
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
@@ -94,6 +98,36 @@ public class User {
 
   public void setUpdated_at(Timestamp updated_at) {
     this.updated_at = updated_at;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(() -> "teacher");
+  }
+
+  @Override
+  public String getUsername() {
+    return name;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+   return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 
   

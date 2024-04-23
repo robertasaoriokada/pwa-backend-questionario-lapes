@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.validation.annotation.Validated;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -29,14 +31,12 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-    http.csrf.disable()
-    .authorizeRequests(
-      auth -> auth.requestMatchers("/authenticate").permitAll()
-      .anyRequest().authenticated())
-    .httpBasic(Customizer.withDefaults())
-    .oauth2ResourceServer(
-      config -> config.jwt(Customizer.withDefaults())
-    );
+    http
+    .authorizeRequests().antMatchers("/authenticate").permitAll().and().csrf().disable();
+    // .httpBasic(Customizer.withDefaults())
+    // .oauth2ResourceServer(
+    //   config -> config.jwt(Customizer.withDefaults())
+    // );
     return http.build();
   }
 
@@ -50,7 +50,12 @@ public class SecurityConfig {
     //json web key
     RSAKey jwk = new RSAKey.Builder(pub).privateKey(priv).build();
     //json web keys
-    JWKSet jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+    var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
   }
 }
